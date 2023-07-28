@@ -29,7 +29,7 @@ function Header() {
         </div>
         <Divider color="red" sx={style} orientation="vertical"></Divider>
         <div className="link">
-          <Link to={"/pokemon"}>
+          <Link to={"/evo"}>
             <h4> Evo Chain</h4>
           </Link>
         </div>

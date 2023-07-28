@@ -8,7 +8,6 @@ function Home() {
   
   function listenerImage(){
     const rotatingImg = document.getElementById("rotatingImg");
-  console.log(rotatingImg);
     document.addEventListener("mousemove", (e) => {
       
         const containerRect = rotatingImg.parentElement.getBoundingClientRect();

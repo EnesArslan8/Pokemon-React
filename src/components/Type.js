@@ -20,7 +20,6 @@ function Type() {
   }, []);
 
   useEffect(() => {
-    setTypePok([]);
     if (selectedTypeId) {
       const fetchTypeId = async () => {
         try {
@@ -42,8 +41,7 @@ function Type() {
     setSelectedTypeId(selectedTypeId === item.name ? null : item.name);
   };
 
-  console.log(data);
-  console.log(typePok);
+  
 
   return (
     <div className="types">
