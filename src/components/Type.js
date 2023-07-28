@@ -5,6 +5,7 @@ function Type() {
   const [data, setData] = useState([]);
   const [selectedTypeId, setSelectedTypeId] = useState(null);
   const [typePok, setTypePok] = useState([]);
+  const [isCardLoad, setIsCardLoad] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,13 +20,16 @@ function Type() {
   }, []);
 
   useEffect(() => {
+    setTypePok([]);
     if (selectedTypeId) {
       const fetchTypeId = async () => {
         try {
           const typeResponse = await axios.get(
             `https://pokeapi.co/api/v2/type/${selectedTypeId}`
           );
+
           setTypePok(typeResponse.data.pokemon);
+          setIsCardLoad(true);
         } catch (err) {
           console.log("Type Id dönerken hata:" + err);
         }
