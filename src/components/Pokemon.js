@@ -21,6 +21,8 @@ const currencies = [
   },
 ];
 
+// ... (yukarıdaki kodlar aynı kalsın) ...
+
 function Pokemon() {
   const [pokemon, setPokemon] = useState([]);
   const [count, setCount] = useState(null);
@@ -28,14 +30,15 @@ function Pokemon() {
   const itemsPerPage = 20;
   const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [flippedCardIndex, setFlippedCardIndex] = useState(-1);
+  const [searchInputValue, setSearchInputValue] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const countResponse = await axios.get(
-          "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=1281"
+          "https://pokeapi.co/api/v2/pokemon/"
         );
-        setCount(countResponse.data.results.length);
+        setCount(countResponse.data.count);
 
         const pokemonResponse = await axios.get(
           `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=${itemsPerPage}`
@@ -49,8 +52,9 @@ function Pokemon() {
   }, []);
 
   const handlePageChange = async (pageNumber) => {
-    setSelectedPokemon()
-    setFlippedCardIndex(-1)
+    setFlippedCardIndex(-1);
+    setSelectedPokemon(null);
+
     try {
       const offset = (pageNumber - 1) * itemsPerPage;
       const response = await axios.get(
@@ -72,21 +76,28 @@ function Pokemon() {
     startPage = Math.max(1, endPage - maxPageButtons + 1);
     return { startPage, endPage };
   };
-  
+
   const handleCardClick = async (id) => {
     try {
-      
-      const currentId = id + 1;
       const response = await axios.get(
-        `https://pokeapi.co/api/v2/pokemon/${currentId}`
+        `https://pokeapi.co/api/v2/pokemon/${id}`
       );
-
-      setFlippedCardIndex(id === flippedCardIndex ? -1 : id);
       setSelectedPokemon(response.data);
+      setFlippedCardIndex(id === flippedCardIndex ? -1 : id);
     } catch (err) {
       console.log("Error fetching Pokemon details: " + err);
     }
   };
+
+  const handleSearchInputChange = (event) => {
+    const { value } = event.target;
+    setSearchInputValue(value);
+  };
+
+  const filteredPokemon = pokemon.filter((item) =>
+    item.name.toUpperCase().includes(searchInputValue.toUpperCase())
+  );
+
   return (
     <div className="pokemon">
       <div className="filterArea">
@@ -97,6 +108,8 @@ function Pokemon() {
           variant="filled"
           helperText="Please search your Pokemon "
           fullWidth
+          value={searchInputValue}
+          onChange={handleSearchInputChange}
         />
         <TextField
           id="searchSelect"
@@ -116,23 +129,23 @@ function Pokemon() {
       </div>
       <div className="count">Toplam Pokemon Sayısı: {count}</div>
       <div className="cardContainer">
-        {pokemon.map((item, id) => (
+        {filteredPokemon.map((item) => (
           <div
-            className={`card ${flippedCardIndex === id ? "flipped" : ""}`}
-            key={id}
-            onClick={() => {
-              handleCardClick(id);
-              setFlippedCardIndex(id === flippedCardIndex ? -1 : id);
-            }}
+            className={`card ${
+              flippedCardIndex === item.name ? "flipped" : ""
+            }`}
+            key={item.name}
+            onClick={() => handleCardClick(item.name)}
           >
             <div className="front">{item.name.toUpperCase()}</div>
             <div className="back">
-              {flippedCardIndex === id && selectedPokemon ? (
+              {flippedCardIndex === item.name && selectedPokemon ? (
                 <div>
                   <img
                     src={
                       selectedPokemon.sprites.other.dream_world.front_default
                     }
+                    alt={selectedPokemon.name}
                   />
                   <p>İsim: {selectedPokemon.name}</p>
                   <p>Boy: {selectedPokemon.height}</p>
