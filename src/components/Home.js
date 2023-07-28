@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import closePoke from "../img/closePoke.png";
-import light from "../img/kisspng-computer-icons-lightning-encapsulated-postscript-5ae53876ad5195.3911558615249716387099.png";
+import {Link} from 'react-router-dom'
+
 function Home() {
   useEffect(()=>{
     listenerImage();
@@ -26,7 +27,7 @@ function Home() {
   return (
     <div className="home">
       <div className="topSide">
-        <button className="getStartedBtn">Get Started</button>
+        <Link to="pokemon"><button className="getStartedBtn">Get Started</button></Link>
       </div>
       <div className="midSide">
         <div className="container">
