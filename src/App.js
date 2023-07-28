@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import Pokemon from "./components/Pokemon";
 import Footer from "./components/Footer";
+import Type from "./components/Type";
 
 function App() {
   return (
@@ -12,9 +13,9 @@ function App() {
       
       <Routes>
         <Route path="/" element={<Home/>}/>
-        <Route path="/pokemon" element={<Pokemon/>}/>
-        
+        <Route path="/type" element={<Type/>}/>
       </Routes>
+      
       <Footer/>
     </div>
   );
