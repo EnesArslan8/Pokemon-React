@@ -2,23 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { TextField, MenuItem, Button } from "@mui/material";
 
-
-// const inputTypes=[
-//   {
-//     value:'NORMAL',
-//     label:'NORMAL'
-//   },{
-//     value:'FIGHTING',
-//     label:'FIGHTING'
-//   },{
-//     value:'FLYING',
-//     label:'FLYING'
-//   },{
-//     value:'POISON',
-//     label:'POISON'
-//   }
-// ]
-
 function Pokemon() {
   const [pokemon, setPokemon] = useState([]);
   const [count, setCount] = useState(null);
@@ -27,8 +10,8 @@ function Pokemon() {
   const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [flippedCardIndex, setFlippedCardIndex] = useState(-1);
   const [searchInputValue, setSearchInputValue] = useState("");
-  const [types,setTypes]=useState([]);
- 
+  const [types, setTypes] = useState([]);
+  const [selectedType, setSelectedType] = useState("Tümü");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,21 +20,51 @@ function Pokemon() {
           "https://pokeapi.co/api/v2/pokemon/"
         );
         setCount(countResponse.data.count);
-        const type =(await axios.get('https://pokeapi.co/api/v2/type'))
-        const typeInput=type.data.results
+        const type = await axios.get("https://pokeapi.co/api/v2/type");
+        const typeInput = type.data.results.map((type) => type.name);
+        setTypes(["Tümü", ...typeInput]);
         const pokemonResponse = await axios.get(
           `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=${itemsPerPage}`
         );
-        setTypes(typeInput)
         setPokemon(pokemonResponse.data.results);
       } catch (err) {
         console.log("Error fetching Pokemon data: " + err);
       }
-      console.log(types)
     };
     fetchData();
-    
   }, []);
+
+  useEffect(() => {
+    const fetchFilteredPokemon = async () => {
+      if (selectedType === "Tümü") {
+        try {
+          const pokemonResponse = await axios.get(
+            `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=${itemsPerPage}`
+          );
+          setPokemon(pokemonResponse.data.results);
+        } catch (err) {
+          console.log("Error fetching Pokemon data: " + err);
+        }
+      } else {
+        try {
+          const typeResponse = await axios.get(
+            `https://pokeapi.co/api/v2/type/${selectedType}`
+          );
+          const pokemonURLs = typeResponse.data.pokemon.map(
+            (pokemon) => pokemon.pokemon.url
+          );
+          const pokemonData = await Promise.all(
+            pokemonURLs.map((url) => axios.get(url))
+          );
+          const filteredPokemon = pokemonData.map((response) => response.data);
+          setPokemon(filteredPokemon);
+        } catch (err) {
+          console.log("Error fetching Pokemon data: " + err);
+        }
+      }
+    };
+    fetchFilteredPokemon();
+  }, [selectedType]);
 
   const handlePageChange = async (pageNumber) => {
     setFlippedCardIndex(-1);
@@ -67,16 +80,6 @@ function Pokemon() {
     } catch (err) {
       console.log("Error fetching Pokemon data for page: " + pageNumber);
     }
-  };
-  console.log(types)
-  const getPageRange = () => {
-    const totalPages = Math.ceil(count / itemsPerPage);
-    const maxPageButtons = 5;
-    let startPage = currentPage - Math.floor(maxPageButtons / 2);
-    startPage = Math.max(1, startPage);
-    const endPage = Math.min(startPage + maxPageButtons - 1, totalPages);
-    startPage = Math.max(1, endPage - maxPageButtons + 1);
-    return { startPage, endPage };
   };
 
   const handleCardClick = async (id) => {
@@ -96,10 +99,20 @@ function Pokemon() {
     setSearchInputValue(value);
   };
 
-  const filteredPokemon = pokemon.filter((item) =>
-    item.name.toUpperCase().includes(searchInputValue.toUpperCase())
-  );
+  const handleSearchSelectChange = (event) => {
+    const { value } = event.target;
+    setSelectedType(value);
+  };
 
+  const getPageRange = () => {
+    const totalPages = Math.ceil(count / itemsPerPage);
+    const maxPageButtons = 5;
+    let startPage = currentPage - Math.floor(maxPageButtons / 2);
+    startPage = Math.max(1, startPage);
+    const endPage = Math.min(startPage + maxPageButtons - 1, totalPages);
+    startPage = Math.max(1, endPage - maxPageButtons + 1);
+    return { startPage, endPage };
+  };
 
   return (
     <div className="pokemon">
@@ -115,22 +128,23 @@ function Pokemon() {
           onChange={handleSearchInputChange}
         />
         <TextField
-          id="outlined-select-currency"
+          id="searchSelect"
           select
-          label="Select"
-          defaultValue="EUR"
-          helperText="Please select your currency"
+          label="Tür"
+          value={selectedType}
+          onChange={handleSearchSelectChange}
+          helperText="Please select your Pokemon type"
         >
-          {types.map((option,id) => (
-            <MenuItem key={id} value={option.name}>
-              {option.name}
+          {types.map((option, id) => (
+            <MenuItem key={id} value={option}>
+              {option}
             </MenuItem>
           ))}
         </TextField>
       </div>
       <div className="count">Toplam Pokemon Sayısı: {count}</div>
       <div className="cardContainer">
-        {filteredPokemon.map((item) => (
+        {pokemon.map((item) => (
           <div
             className={`card ${
               flippedCardIndex === item.name ? "flipped" : ""
@@ -182,13 +196,3 @@ function Pokemon() {
 }
 
 export default Pokemon;
-
-
-
-
-
-
-
-
-
-
