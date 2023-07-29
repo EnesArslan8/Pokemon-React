@@ -2,26 +2,22 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { TextField, MenuItem, Button } from "@mui/material";
 
-const currencies = [
-  {
-    value: "USD",
-    label: "$",
-  },
-  {
-    value: "EUR",
-    label: "€",
-  },
-  {
-    value: "BTC",
-    label: "฿",
-  },
-  {
-    value: "JPY",
-    label: "¥",
-  },
-];
 
-// ... (yukarıdaki kodlar aynı kalsın) ...
+// const inputTypes=[
+//   {
+//     value:'NORMAL',
+//     label:'NORMAL'
+//   },{
+//     value:'FIGHTING',
+//     label:'FIGHTING'
+//   },{
+//     value:'FLYING',
+//     label:'FLYING'
+//   },{
+//     value:'POISON',
+//     label:'POISON'
+//   }
+// ]
 
 function Pokemon() {
   const [pokemon, setPokemon] = useState([]);
@@ -31,6 +27,8 @@ function Pokemon() {
   const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [flippedCardIndex, setFlippedCardIndex] = useState(-1);
   const [searchInputValue, setSearchInputValue] = useState("");
+  const [types,setTypes]=useState([]);
+ 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,16 +37,20 @@ function Pokemon() {
           "https://pokeapi.co/api/v2/pokemon/"
         );
         setCount(countResponse.data.count);
-
+        const type =(await axios.get('https://pokeapi.co/api/v2/type'))
+        const typeInput=type.data.results
         const pokemonResponse = await axios.get(
           `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=${itemsPerPage}`
         );
+        setTypes(typeInput)
         setPokemon(pokemonResponse.data.results);
       } catch (err) {
         console.log("Error fetching Pokemon data: " + err);
       }
+      console.log(types)
     };
     fetchData();
+    
   }, []);
 
   const handlePageChange = async (pageNumber) => {
@@ -66,7 +68,7 @@ function Pokemon() {
       console.log("Error fetching Pokemon data for page: " + pageNumber);
     }
   };
-
+  console.log(types)
   const getPageRange = () => {
     const totalPages = Math.ceil(count / itemsPerPage);
     const maxPageButtons = 5;
@@ -98,6 +100,7 @@ function Pokemon() {
     item.name.toUpperCase().includes(searchInputValue.toUpperCase())
   );
 
+
   return (
     <div className="pokemon">
       <div className="filterArea">
@@ -112,17 +115,15 @@ function Pokemon() {
           onChange={handleSearchInputChange}
         />
         <TextField
-          id="searchSelect"
+          id="outlined-select-currency"
           select
-          variant="outlined"
-          color="error"
-          label="Tür"
-          defaultValue="Tür Seçiniz"
-          helperText="Please select your Pokemon type"
+          label="Select"
+          defaultValue="EUR"
+          helperText="Please select your currency"
         >
-          {currencies.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
+          {types.map((option,id) => (
+            <MenuItem key={id} value={option.name}>
+              {option.name}
             </MenuItem>
           ))}
         </TextField>
@@ -181,3 +182,13 @@ function Pokemon() {
 }
 
 export default Pokemon;
+
+
+
+
+
+
+
+
+
+
