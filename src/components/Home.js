@@ -31,9 +31,9 @@ function Home() {
       </div>
       <div className="midSide">
         <div className="container">
-          <button className="itemCategoryBtn">Item Category</button>
+          <Link to="/itemCategory"><button className="itemCategoryBtn">Item Category</button></Link>
           <img id="rotatingImg" src={closePoke} />
-          <button className="genderBtn">Gender</button>
+          <Link to="/gender"><button className="genderBtn">Gender</button></Link>
         </div>
       </div>
       <div className="bottomSide">
