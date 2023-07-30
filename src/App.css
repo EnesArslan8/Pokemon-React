@@ -162,12 +162,15 @@ body {
 }
 .footer .footerLinks ul {
   list-style: none;
+  text-decoration: none;
 }
 .footer .footerLinks ul li {
   cursor: pointer;
+  color: #666;
 }
 .footer .footerLinks ul li:hover {
   color: #999;
+  text-decoration: underline;
 }
 /*******************************************************TYPE************************************/
 .types {
