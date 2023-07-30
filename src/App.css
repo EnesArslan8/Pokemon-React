@@ -23,7 +23,6 @@ body {
   align-items: center;
   justify-content: space-around;
   margin-bottom: 100px;
-  
 }
 .header .logoArea {
   position: absolute;
@@ -36,7 +35,7 @@ body {
   border-radius: 0px 0px 400px 400px / 0px 0px 100px 100px;
   transition: 300ms all;
 }
-.header .logoArea:hover{
+.header .logoArea:hover {
   padding: 20px 10px;
 }
 .header .logo {
@@ -116,13 +115,9 @@ body {
   max-height: 400px;
   filter: drop-shadow(20px 20px 10px rgba(0, 0, 0, 0.5));
 
+  width: 400px;
+  height: 400px;
 
- 
-  width: 400px; 
-  height: 400px; 
-  
-
-  
   transform-origin: center center;
   transition: transform 0.2s ease;
 }
@@ -197,10 +192,9 @@ body {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  width:100%;
+  width: 100%;
   height: 100%;
 
-  
   margin: 0 auto;
 }
 .types .cardContainer .card {
@@ -210,13 +204,11 @@ body {
   justify-content: center;
   width: 300px;
   height: 350px;
-  margin: 2% ;
+  margin: 2%;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
   background-color: #faedcd;
   border: 1px solid #000;
 
-  
-  
   font-size: 18px;
   position: relative;
   transition: transform 0.6s ease;
@@ -248,7 +240,7 @@ body {
 }
 
 /*******************************************************POKEMON************************************/
-.pokemon{
+.pokemon {
   height: 100%;
   width: 100%;
   padding: 0 10%;
@@ -262,10 +254,9 @@ body {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  width:100%;
+  width: 100%;
   height: 100%;
 
-  
   margin: 0 auto;
 }
 .pokemon .cardContainer .card {
@@ -275,21 +266,18 @@ body {
   justify-content: center;
   width: 300px;
   height: 350px;
-  margin: 2% ;
+  margin: 2%;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
   background-color: #faedcd;
   border: 1px solid #000;
   font-size: 25px;
   font-weight: 600;
-  
-  
+
   position: relative;
   transition: transform 0.6s ease;
-
-
 }
 
-.pokemon .filterArea{
+.pokemon .filterArea {
   width: 100%;
   display: flex;
 }
@@ -318,4 +306,73 @@ body {
   border-bottom: 1px solid #000;
   overflow: auto;
   transform: rotateY(0deg);
+}
+
+/*******************************************************GENDER************************************/
+.genders {
+  width: 100%;
+  height: 100%;
+  margin: 10% 0;
+  /* padding: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column; */
+}
+.genders .container{
+  width: 100%;
+  height: 15rem;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+}
+.genders .container .gender{
+  height: 300px;
+  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #faedcd;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+  margin-right: 5%;
+  
+}
+.genders .container .genderArea{
+  height: 275px;
+  width: 600px;
+  display: flex;
+}
+.genders .container .genderArea ul{
+  width: 100%;
+  height: 100%;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  list-style: none;
+}
+.genders .container .genderArea .genderType{
+  background-color: #faedcd;
+  width: 100%;
+  margin: 0px 0;
+  display: flex;
+  align-items: start;
+  justify-content: start;
+  padding:20px 40px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+.genders .genderCount{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10%;
+  font-size: 15px;
+}
+.genders .container .genderArea .genderType .icon{
+  font-size: 30px;
+}
+.genders .container .genderArea .genderType .typeText{
+  margin-left: 5%;
+  font-size: 20px;
 }
