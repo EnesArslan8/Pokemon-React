@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import Type from "./components/Type";
 import Gender from "./components/Gender";
 import ItemCategory from "./components/ItemCategory";
+import Item from "./components/Item";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/pokemon" element={<Pokemon/>}/>
         <Route path="/itemCategory" element={<ItemCategory/>}/>
         <Route path="/gender" element={<Gender/>}/>
+        <Route path="/item" element={<Item/>}/>
       </Routes>
 
       <Footer/>

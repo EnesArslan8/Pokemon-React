@@ -38,7 +38,7 @@ function Home() {
       </div>
       <div className="bottomSide">
         <div>
-          <button>Item</button>
+          <Link to="/item"><button>Item</button></Link>
         </div>
       </div>
     </div>

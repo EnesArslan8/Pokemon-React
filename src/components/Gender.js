@@ -30,8 +30,6 @@ function Gender() {
     }
   };
 
-
-  console.log(data);
   return (
     <div className="genders">
       <div className="container">
