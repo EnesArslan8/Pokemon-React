@@ -29,8 +29,8 @@ function Header() {
         </div>
         <Divider color="red" sx={style} orientation="vertical"></Divider>
         <div className="link">
-          <Link to={"/evo"}>
-            <h4> Evo Chain</h4>
+          <Link to={"/reigon"}>
+            <h4> Reigon</h4>
           </Link>
         </div>
       </div>

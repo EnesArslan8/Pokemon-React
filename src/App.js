@@ -8,6 +8,7 @@ import Type from "./components/Type";
 import Gender from "./components/Gender";
 import ItemCategory from "./components/ItemCategory";
 import Item from "./components/Item";
+import Reigon from "./components/Reigon";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/itemCategory" element={<ItemCategory/>}/>
         <Route path="/gender" element={<Gender/>}/>
         <Route path="/item" element={<Item/>}/>
+        <Route path="/reigon" element={<Reigon/>}/>
       </Routes>
 
       <Footer/>

@@ -24,7 +24,6 @@ function ItemCategory() {
       <h1 className="title">Item Category</h1>
       <div className="container">
         <div className="categoryItems">
-          
           {data.map((item,id)=>{
             return <span key={id} className="categoryText"><SubdirectoryArrowRightIcon className="icon"/>{item.name}</span>
           })}

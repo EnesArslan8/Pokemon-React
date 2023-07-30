@@ -23,7 +23,7 @@ function Footer() {
             <li>Gender</li>
             <li>Item</li>
             <li>Type</li>
-            <li>Evo Chain</li>
+            <li>Reigon</li>
           </ul>
         </div>
       </div>
