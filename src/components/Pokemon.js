@@ -28,7 +28,7 @@ function Pokemon() {
         const typeInput = type.data.results.map((type) => type.name);
         setTypes(["Tümü", ...typeInput]);
         const pokemonResponse = await axios.get(
-          `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=${itemsPerPage}`
+          `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=${itemsPerPage *20}`
         );
         setPokemon(pokemonResponse.data.results);
       } catch (err) {
@@ -47,16 +47,17 @@ function Pokemon() {
             `https://pokeapi.co/api/v2/pokemon/?offset=${
               (currentPage - 1) * itemsPerPage
             }&limit=${itemsPerPage * 20}`
+            // `https://pokeapi.co/api/v2/pokemon/?offset=${(currentPage - 1) * itemsPerPage}&limit=${itemsPerPage}`
           );
-          setCurrentPage(1); // Sayfalama sıfırlanıyor
+          // setCurrentPage(1); // Sayfalama sıfırlanıyor
           setPokemon(pokemonResponse.data.results);
         } catch (err) {
           console.log("Error fetching Pokemon data: " + err);
         }
-      }else if(selectedType==="shadow" || selectedType==='unknown'){
-        setShowPageButtons(true)
-      } 
-      else {
+      } else if (selectedType === "shadow" || selectedType === "unknown") {
+        setShowPageButtons(true);
+      }
+       else {
         try {
           const typeResponse = await axios.get(
             `https://pokeapi.co/api/v2/type/${selectedType}`
@@ -69,14 +70,16 @@ function Pokemon() {
           );
           const filteredPokemon = pokemonData.map((response) => response.data);
           setPokemon(filteredPokemon);
-          setCurrentPage(1); // Sayfalama sıfırlanıyor
+          setCurrentPage(1);  //Sayfalama sıfırlanıyor
           setShowPageButtons(false);
         } catch (err) {
           console.log("Error fetching Pokemon data: " + err);
         }
       }
     };
+    getPageRange()
     fetchFilteredPokemon();
+    console.log(pokemon.length)
   }, [selectedType, searchInputValue]);
   
   const handlePageChange = async (pageNumber) => {
@@ -99,7 +102,7 @@ function Pokemon() {
 
   const handleSearchInputChange = (event) => {
     const { value } = event.target;
-    // setShowPageButtons(false);
+    // setShowPageButtons(true);
     setSearchInputValue(value);
   };
 
@@ -123,18 +126,29 @@ function Pokemon() {
     }
   };
 
-  const getTotalPageCount = () => Math.ceil(count / itemsPerPage);
-
   const getPageRange = () => {
-    const totalPages = getTotalPageCount();
-    const maxPageButtons = 5;
-    let startPage = currentPage - Math.floor(maxPageButtons / 2);
-    startPage = Math.max(1, startPage);
-    const endPage = Math.min(startPage + maxPageButtons - 1, totalPages);
-    startPage = Math.max(1, endPage - maxPageButtons + 1);
-
-    return { startPage, endPage };
+    if ((selectedType === "Tümü"||searchInputValue==='')) {
+      const getTotalPageCount = () => Math.ceil(pokemon.length/ itemsPerPage);
+      const totalPages = getTotalPageCount();
+      const maxPageButtons = 5;
+      let startPage = currentPage - Math.floor(maxPageButtons / 2);
+      startPage = Math.max(1, startPage);
+      const endPage = Math.min(startPage + maxPageButtons - 1, totalPages);
+      
+      return { startPage, endPage };
+    } 
+    else {
+      
+      const getTotalPageCount = () => Math.ceil(pokemon.length / itemsPerPage);
+      const totalPages = getTotalPageCount();
+      const maxPageButtons = 5;
+      let startPage = currentPage - Math.floor(maxPageButtons / 2);
+      startPage = Math.max(1, startPage);
+      const endPage = Math.min(startPage + maxPageButtons - 1, totalPages);
+      return { startPage, endPage };
+    }
   };
+ 
 
   return (
     <div className="pokemon">
@@ -208,7 +222,10 @@ function Pokemon() {
       </div>
       <div className="pages">
         {showPageButtons ||
-          (searchInputValue === "" && (
+          ((searchInputValue === "" ||
+            selectedType === "Tümü" ||
+            selectedType === "shadow" ||
+            selectedType === "unknown") && (
             <div>
               {Array.from(
                 {
