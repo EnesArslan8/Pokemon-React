@@ -42,7 +42,7 @@ function Type() {
   };
 
   
-
+  console.log(typePok)
   return (
     <div className="types">
       <h1 className="typeTitle">POKEMON TYPES</h1>
@@ -69,7 +69,7 @@ function Type() {
             );
           })
         ) : (
-          <p className="loading">Loading gelecek buraya</p>
+          <p className="loading"></p>
         )}
       </div>
     </div>

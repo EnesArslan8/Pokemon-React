@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Button from "@mui/material/Button";
-
+import LoadingSpin from "react-loading-spin";
 function Item() {
   const [itemName, setItemName] = useState([]);
   const [itemImg, setItemImg] = useState({});
@@ -70,49 +70,65 @@ function Item() {
 
   return (
     <div className="items">
-        <h1 className="title">Item</h1>
-      <div className="itemContainer">
-        {itemName.map((item, id) => (
-          <div className="item" key={id}>
-            <div className="imgArea">
-              {itemImg[item.name] && (
-                <img className="img" src={itemImg[item.name]} alt={item.name} />
-              )}
-            </div>
-            <div className="itemTitle">{item.name}</div>
+      {!currentPage && (
+        <div>
+          <LoadingSpin/>
+        </div>
+      )}
+      {currentPage && (
+        <>
+          <h1 className="title">Item</h1>
+          <div className="itemContainer">
+            {itemName.map((item, id) => (
+              <div className="item" key={id}>
+                <div className="imgArea">
+                  {!itemImg && <div><LoadingSpin /></div>}
+                  {itemImg[item.name] && (
+                    <img
+                      className="img"
+                      src={itemImg[item.name]}
+                      alt={item.name}
+                    />
+                  )}
+                </div>
+                <div className="itemTitle">{item.name}</div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="pagination">
-        <Button
-          onClick={() => handlePageChange(1)}
-          disabled={currentPage === 1}
-        >
-          {"<<"}
-        </Button>
-        {Array.from(
-          { length: getPageRange().endPage - getPageRange().startPage + 1 },
-          (_, index) => (
+          <div className="pagination">
             <Button
-              key={getPageRange().startPage + index}
-              onClick={() => handlePageChange(getPageRange().startPage + index)}
-              variant={
-                currentPage === getPageRange().startPage + index
-                  ? "contained"
-                  : "outlined"
-              }
+              onClick={() => handlePageChange(1)}
+              disabled={currentPage === 1}
             >
-              {getPageRange().startPage + index}
+              {"<<"}
             </Button>
-          )
-        )}
-        <Button
-          onClick={() => handlePageChange(totalPages)}
-          disabled={currentPage === totalPages}
-        >
-          {">>"}
-        </Button>
-      </div>
+            {Array.from(
+              { length: getPageRange().endPage - getPageRange().startPage + 1 },
+              (_, index) => (
+                <Button
+                  key={getPageRange().startPage + index}
+                  onClick={() =>
+                    handlePageChange(getPageRange().startPage + index)
+                  }
+                  variant={
+                    currentPage === getPageRange().startPage + index
+                      ? "contained"
+                      : "outlined"
+                  }
+                >
+                  {getPageRange().startPage + index}
+                </Button>
+              )
+            )}
+            <Button
+              onClick={() => handlePageChange(totalPages)}
+              disabled={currentPage === totalPages}
+            >
+              {">>"}
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 }
