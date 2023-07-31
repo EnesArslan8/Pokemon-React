@@ -42,7 +42,6 @@ function Type() {
   };
 
   
-  console.log(typePok)
   return (
     <div className="types">
       <h1 className="typeTitle">POKEMON TYPES</h1>
@@ -60,6 +59,7 @@ function Type() {
                 <h1>{item.name.toUpperCase()}</h1>
                 {selectedTypeId === item.name && (
                   <div className="back">
+                    {typePok.length===0 && <div className="notAvailable">Bu türe ait Pokemon bilgisi yoktur.</div>}
                     {typePok.map((pokemon, index) => (
                       <p key={index}>{pokemon.pokemon.name}</p>
                     ))}
