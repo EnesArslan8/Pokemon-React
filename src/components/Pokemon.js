@@ -41,6 +41,7 @@ function Pokemon() {
   useEffect(() => {
     const fetchFilteredPokemon = async () => {
       if (selectedType === "Tümü") {
+        setShowPageButtons(false);
         try {
           const pokemonResponse = await axios.get(
             `https://pokeapi.co/api/v2/pokemon/?offset=${
@@ -52,7 +53,10 @@ function Pokemon() {
         } catch (err) {
           console.log("Error fetching Pokemon data: " + err);
         }
-      } else {
+      }else if(selectedType==="shadow" || selectedType==='unknown'){
+        setShowPageButtons(true)
+      } 
+      else {
         try {
           const typeResponse = await axios.get(
             `https://pokeapi.co/api/v2/type/${selectedType}`
@@ -66,7 +70,7 @@ function Pokemon() {
           const filteredPokemon = pokemonData.map((response) => response.data);
           setPokemon(filteredPokemon);
           setCurrentPage(1); // Sayfalama sıfırlanıyor
-          
+          setShowPageButtons(false);
         } catch (err) {
           console.log("Error fetching Pokemon data: " + err);
         }
@@ -74,7 +78,7 @@ function Pokemon() {
     };
     fetchFilteredPokemon();
   }, [selectedType, searchInputValue]);
-
+  
   const handlePageChange = async (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -95,10 +99,10 @@ function Pokemon() {
 
   const handleSearchInputChange = (event) => {
     const { value } = event.target;
-    setShowPageButtons(false);
+    // setShowPageButtons(false);
     setSearchInputValue(value);
   };
- 
+
   const handleSearchSelectChange = (event) => {
     const { value } = event.target;
     setSelectedType(value);
@@ -111,9 +115,10 @@ function Pokemon() {
         item.name.toUpperCase().includes(searchInputValue.toUpperCase())
       );
     } else {
-      return pokemon.filter((item) =>
-        item.types?.some((type) => type.type.name === selectedType) &&
-        item.name.toUpperCase().includes(searchInputValue.toUpperCase())
+      return pokemon.filter(
+        (item) =>
+          item.types?.some((type) => type.type.name === selectedType) &&
+          item.name.toUpperCase().includes(searchInputValue.toUpperCase())
       );
     }
   };
@@ -160,6 +165,11 @@ function Pokemon() {
         </TextField>
       </div>
       <div className="count">Toplam Pokemon Sayısı: {count}</div>
+      {(selectedType === "unknown" || selectedType === "shadow") && (
+        <div className="notAvailable">
+          Seçilen türe ait Pokemon mevcut değildir!
+        </div>
+      )}
       <div className="cardContainer">
         {filteredPokemon()
           .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
@@ -197,28 +207,31 @@ function Pokemon() {
           ))}
       </div>
       <div className="pages">
-        {showPageButtons || searchInputValue==="" && (
-          <div>
-            {Array.from(
-              { length: getPageRange().endPage - getPageRange().startPage + 1 },
-              (_, index) => (
-                <Button
-                  key={getPageRange().startPage + index}
-                  variant={
-                    currentPage === getPageRange().startPage + index
-                      ? "contained"
-                      : "outlined"
-                  }
-                  onClick={() =>
-                    handlePageChange(getPageRange().startPage + index)
-                  }
-                >
-                  {getPageRange().startPage + index}
-                </Button>
-              )
-            )}
-          </div>
-        )}
+        {showPageButtons ||
+          (searchInputValue === "" && (
+            <div>
+              {Array.from(
+                {
+                  length: getPageRange().endPage - getPageRange().startPage + 1,
+                },
+                (_, index) => (
+                  <Button
+                    key={getPageRange().startPage + index}
+                    variant={
+                      currentPage === getPageRange().startPage + index
+                        ? "contained"
+                        : "outlined"
+                    }
+                    onClick={() =>
+                      handlePageChange(getPageRange().startPage + index)
+                    }
+                  >
+                    {getPageRange().startPage + index}
+                  </Button>
+                )
+              )}
+            </div>
+          ))}
       </div>
     </div>
   );
