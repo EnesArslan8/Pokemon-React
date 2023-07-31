@@ -28,7 +28,7 @@ function Pokemon() {
         const typeInput = type.data.results.map((type) => type.name);
         setTypes(["Tümü", ...typeInput]);
         const pokemonResponse = await axios.get(
-          `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=${itemsPerPage *20}`
+          `https://pokeapi.co/api/v2/pokemon/?offset=${currentPage-1}}&limit=${itemsPerPage *20}`
         );
         setPokemon(pokemonResponse.data.results);
       } catch (err) {
@@ -203,15 +203,15 @@ function Pokemon() {
                   </div>
                 ) : flippedCardIndex === item.name && selectedPokemon ? (
                   <div>
-                    <img
+                    <img className="img"
                       src={
                         selectedPokemon.sprites.other.dream_world.front_default
                       }
                       alt={selectedPokemon.name}
                     />
-                    <p>İsim: {selectedPokemon.name}</p>
-                    <p>Boy: {selectedPokemon.height}</p>
-                    <p>Ağırlık: {selectedPokemon.weight}</p>
+                    <p className="text"><span className="key">İsim:</span> {selectedPokemon.name}</p>
+                    <p className="text"><span className="key">Boy: </span>{selectedPokemon.height}</p>
+                    <p className="text"><span className="key">Ağırlık:</span> {selectedPokemon.weight}</p>
                   </div>
                 ) : (
                   <p>Bu pokemonun bilgileri bulunamadı.</p>
